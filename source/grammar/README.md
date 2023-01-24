@@ -20,6 +20,9 @@ The grammar is specified in files [ibmqasm3Lexer.g4](./ibmqasm3Lexer.g4) and [ib
 #### What are the extensions / modifications ?
 
 The extensions are mentioned in comments in the [ibmqasm3Lexer.g4](./ibmqasm3Lexer.g4) and [ibmqasm3Parser.g4](./ibmqasm3Parser.g4).
+Here is [a list of the extensions](https://github.com/jlapeyre/openqasm/blob/ibmqasm/source/grammar/differences-from-spec.md)
+
+
 
 #### Building
 
