@@ -4,3 +4,4 @@ qasm3Lexer.py
 qasm3Parser.py
 qasm3ParserVisitor.py
 qasm3ParserListener.py
+ibmopenqasm_reference_parser/
