@@ -3,7 +3,7 @@
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more. What features do we need to add?
 
 It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent
-$$\{ P_1 P_2 \}$$
+$$\{ P_1 P_2 | P_i \in {I, X, Y, Z} \}$$
 
 Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type,
 ```C
