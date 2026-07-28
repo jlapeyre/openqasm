@@ -8,13 +8,7 @@ $$\\{ P_1 \ldots P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
 
 Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type,
 ```C
-factor[4] p = p"XYZ";
-```
-
-
-An incompatible design that does not include qubit indices in the Pauli string
-```C
-factor[4] p = p"XYZ";
+factor[4] p = p"XYZY";
 angle a = pi / 8;
 gate r = rot(a, p); // or `rot(a) p;`
 qubit[22] q;
