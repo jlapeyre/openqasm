@@ -6,14 +6,16 @@ It makes sense to have a first-class type representing (phaseless) Pauli strings
 
 $$\\{ P_1 \ldots P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
 
-Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type,
+Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type. It might work like this,
 ```C
 factor[3] p = p"XYZ";
 angle a = pi / 8;
 gate r = rot(a, p); // or `rot(a) p;`
 qubit[12] q;
-r q[3], q[5] q[11];
+r q[3], q[5] q[11];,
 ```
+where `factor` is a new type.
+
 
 The following PBC circuit is shown in figure 4a of GOSC.
 
