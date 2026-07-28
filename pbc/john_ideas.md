@@ -19,7 +19,7 @@ where `factor` is a new type.
 
 The following PBC circuit is shown in figure 4a of GOSC.
 I define a gate via `rcontrol(p"X", p"Z")`.
-This gate which operates with `Z` on the target
+This gate operates with `Z` on the target
 if the control is in the `-1` eigenstate of `X`.
 It is assumed that `rcontrol` is implemented in a library.
 We may not have (or want to have) semantics to support such a gate construction.
