@@ -8,14 +8,14 @@ $$\\{ P_1 \ldots P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
 
 Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type,
 ```C
-factor[4] p = p"XYZY";
+factor[3] p = p"XYZ";
 angle a = pi / 8;
 gate r = rot(a, p); // or `rot(a) p;`
-qubit[22] q;
-r q[3], q[12], q[21];
+qubit[12] q;
+r q[3], q[5] q[11];
 ```
 
-This PBC circuit is shown in figure 4a of GOSC.
+The following PBC circuit is shown in figure 4a of GOSC.
 
 Below, I define `rcontrol(p"X", p"Z")`, which operates with `Z` on the target
 if the control is in the `-1` eigenstate of `X`.
