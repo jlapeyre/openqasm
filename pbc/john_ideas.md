@@ -116,7 +116,7 @@ if (b2 == 1) {
 
 #### Magic state distillation
 
-```
+```C
 qubit[4] dirty;
 qubit[1] cleaner;
 
@@ -145,7 +145,7 @@ measure dirty; // measure out dirty qubits in x-basis
 
 
 Or, we might allow this:
-```
+```C
 qubit[4] dirty;
 qubit[1] cleaner;
 
