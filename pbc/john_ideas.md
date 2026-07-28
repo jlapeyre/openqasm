@@ -5,20 +5,18 @@ What features do we need to add?
 And which circuits can we implement?
 
 It makes sense to have a first-class type representing (phaseless) Pauli strings,
-rather than carring an unused complex phase.
+rather than carrying an unused complex phase.
 We want to represent phaseless $n$-qubit Pauli strings
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-In the following, we define no operations on Pauli strings.
-We may have to introduce phases, and operations on Paulis.
+In what follow, we define no operations on Pauli strings.
+We may need to introduce phases and operations on Pauli strings.
 But I want to see how much we can do without them.
 
-Let's try to implement a Pauli string as an array of single-qubit Paulis,
-rather than a new array-like type.
-Then we can use existing syntax and semantics.
-
-It might work like this,
+If we represent Pauli strings as arrays of single‑qubit Pauli values,
+then we can reuse existing syntax and semantics.
+It might work like this:
 ```C
 pauli[3] p = p"XYZ";
 angle a = pi / 8;
@@ -40,7 +38,7 @@ r q[0], q[1];
 
 ### Examples
 
-Here is Bell state preparation as shown in Fig. 2a of GOSC.
+Here is Bell-state preparation as shown in Fig. 2a of GOSC.
 ```C
 qubit[2] q;
 pauli[2] zprod = p"ZZ";
@@ -48,7 +46,7 @@ pauli[2] zprod = p"ZZ";
 h q; // Apply h to both qubits.
 bit b = measure_pauli(zprod) q;
 if (b == 1) {
-    x q[0]; // send |01> and |10> to |00> and |11>.
+    x q[0]; // map |01> and |10> to |00> and |11>.
 }
 ```
 
@@ -63,7 +61,7 @@ gate z8 = rot(pi / 8, p"Z");
 gate z4 = rot(pi / 4, p"Z");
 gate x4 = rot(pi / 4, p"X");
 gate xm4 = rot(-pi / 4, p"X");
-gate cxz = rcontrol(p"X", p"Z"); // Apply Z to target, if control is in -1 eigenstate of X.
+gate cxz = rcontrol(p"X", p"Z"); // Apply Z to target if control is in -1 eigenstate of X.
 
 z8 q[0];
 cxz q[1], q[2];
@@ -93,7 +91,7 @@ b = measure q;
 #### Magic state injection
 
 This example uses aliased, concatenated registers and arrays.
-For the moment, I am dodging questions of existing OQ3 semantics.
+For now, I am dodging questions of existing OQ3 semantics.
 
 This circuit is shown in Fig. 7 in GOSC.
 The effect is to apply `rot(pi / 8, P)` to the `data` register.
@@ -111,7 +109,7 @@ let register = data ++ ancilla;
 prepare data; // prepare is a gate that prepares the state of data.
 t ancilla[0]; // magically generate a magic state.
 
-// A product measurement including data and ancilla qubits.
+// A product measurement on the data and ancilla qubits.
 bit b1 = measure_pauli(prod) register;
 
 if (b1 == 1) {
@@ -151,10 +149,10 @@ rot(a, p"ZZZII") register;
 rot(a, p"ZZZZZ") register;
 
 h dirty;
-measure dirty; // measure out dirty qubits in the X basis
+measure dirty; // Measure dirty qubits in the X basis.
 ```
 
-Alternatively, we can use a multi-dimension array of `pauli`, and use a loop, like this:
+Alternatively, we can use a multi-dimensional array of type `pauli`, and use a loop, like this:
 ```C
 qubit[4] dirty;
 qubit[1] cleaner;
