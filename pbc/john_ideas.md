@@ -4,7 +4,7 @@ Suppose that we want to add support for Pauli rotations and product measurements
 
 It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless $n$-qubit Pauli strings
 
-$$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
+$$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
 Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type. It might work like this,
 ```C
@@ -25,7 +25,21 @@ qubit[2] q;
 r q[0], q[1];
 ```
 
-The following PBC circuit is shown in figure 4a of GOSC.
+### Examples
+
+Here is Bell state preparation as shown in Fig. 2a of GOSC.
+```C
+qubit[2] q;
+factor[2] zprod = p"ZZ";
+
+h q; // Apply h to both qubits.
+bit b = measure_pauli zprod;
+if (b == 1) {
+    x q[0]; // send |01> and |10> to |00> and |11>.
+}
+```
+
+The following PBC circuit is shown in Fig. 4a of GOSC.
 I define a gate via `rcontrol(p"X", p"Z")`.
 This gate operates with `Z` on the target
 if the control is in the `-1` eigenstate of `X`.
@@ -59,5 +73,49 @@ x4 q[2];
 x4 q[3];
 
 bit[4] b;
+
+// Measure all qubits in the Z basis.
 b = measure q;
 ```
+
+Magic state injection
+
+This example uses aliased, concatenated registers, or arrays.
+For the moment, I am dodging existing OQ3 semantics.
+
+This circuit is shown in Fig. 7 in GOSC.
+The effect is to apply `rot(P, pi / 8)` to the `data` register.
+```C
+factor[3] P = "XZY";
+qubit[3] data;
+
+qubit[1] ancilla;
+factor[1] z = "Z";
+
+let prod = P ++ z;
+
+let register = data ++ ancilla;
+
+prepare data; // prepare is a gate that prepares the state of data.
+t z[0]; // magically generate a magic state.
+
+// A product measurement including data and ancilla qubits.
+bit b1 = measure_pauli(prod) register;
+
+if (b1 == 1) {
+    rot(P, pi / 4) data;
+}
+
+h ancilla; // to measure in the X basis
+bit b2 = measure ancilla;
+
+if (b2 == 1) {
+    rot(P, pi / 2) data;
+}
+```
+
+Distillation
+
+```
+qubit[4] dirty;
+qubit[1] cleaner;
