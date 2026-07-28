@@ -55,8 +55,6 @@ I define a gate via `rcontrol(p"X", p"Z")`.
 This gate operates with `Z` on the target
 if the control is in the `-1` eigenstate of `X`.
 It is assumed that `rcontrol` is implemented in a library.
-We may not have (or want to have) semantics to support such a gate construction.
-In this case, these gates must be generated at a higher level and hard-coded into an OpenQASM.
 ```C
 qubit[4] q;
 gate z8 = rot(p"Z", pi / 8);
