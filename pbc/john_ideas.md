@@ -1,4 +1,4 @@
-== Pauli rotations and product measurements
+## Pauli rotations and product measurements
 
 What do we need to support Pauli rotations and product measurements as the only enhancements to OQ3?
 
@@ -59,7 +59,7 @@ bit[4] b;
 b = measure q;
 ```
 
-=== Including qubit index in the Pauli string
+### Including qubit index in the Pauli string
 
 
 Here, I include the qubit index in the Pauli string
@@ -88,7 +88,7 @@ qubit[22] q;
 r q;
 ```
 
-=== Examples
+### Examples
 
 For example, here is Bell state preparation.
 ```C
