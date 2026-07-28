@@ -8,11 +8,13 @@ It makes sense to have a first-class type representing (phaseless) Pauli strings
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type. It might work like this,
+Let's try to implement a Pauli string as an array of single-qubit factors,
+rather than a new array-like type.
+It might work like this,
 ```C
 factor[3] p = p"XYZ";
 angle a = pi / 8;
-gate r = rot(a, p); // or `rot(a) p;`
+gate r = rot(a, p);
 qubit[12] q;
 r q[3], q[5] q[11];,
 ```
@@ -21,9 +23,10 @@ where `factor` is a new type.
 It will probably be useful to support slicing:
 ```C
 factor[3] p = p"XYZ";
+qubit[2] q;
+
 angle a = pi / 8;
 gate r = rot(a, p({0, 2}); // The Pauli in the exponent is XZ.
-qubit[2] q;
 r q[0], q[1];
 ```
 
@@ -35,7 +38,7 @@ qubit[2] q;
 factor[2] zprod = p"ZZ";
 
 h q; // Apply h to both qubits.
-bit b = measure_pauli zprod;
+bit b = measure_pauli(zprod) q;
 if (b == 1) {
     x q[0]; // send |01> and |10> to |00> and |11>.
 }
