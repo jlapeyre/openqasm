@@ -4,9 +4,10 @@ Suppose that we want to add support for Pauli rotations and product measurements
 What features do we need to add?
 And which circuits can we implement?
 
-It makes sense to have a first-class type representing (phaseless) Pauli strings,
+It makes sense to have a first-class, phase-free Pauli-string type,
 rather than carrying an unused complex phase.
-We want to represent phaseless $n$-qubit Pauli strings
+We want to represent phase-free $n$-qubit Pauli strings.
+That is,
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
@@ -38,7 +39,7 @@ r q[0], q[1];
 
 ### Examples
 
-Here is Bell-state preparation as shown in Fig. 2a of GOSC.
+Here is Bell-state preparation as shown in Fig. 2a of Game of Surface Codes (GOSC).
 ```C
 qubit[2] q;
 pauli[2] zprod = p"ZZ";
