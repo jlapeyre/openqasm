@@ -1,4 +1,4 @@
-## Pauli rotations and product measurements
+## Pauli rotations and product measurements in OpenQASM
 
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
