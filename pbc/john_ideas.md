@@ -1,6 +1,8 @@
 ## Pauli rotations and product measurements
 
-Suppose that we want to add support for Pauli rotations and product measurements, but nothing more. What features do we need to add?
+Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
+What features do we need to add?
+And which circuits can we implement?
 
 It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless $n$-qubit Pauli strings
 
