@@ -4,7 +4,7 @@ Suppose that we want to add support for Pauli rotations and product measurements
 
 It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless $n$-qubit Pauli strings
 
-$$\\{ P_1 \ldots P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
+$$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
 
 Let's try to implement a Pauli string as an array of single-qubit factors, rather than a new array-like type. It might work like this,
 ```C
