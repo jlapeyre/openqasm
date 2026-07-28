@@ -1,17 +1,18 @@
 ## Pauli rotations and product measurements in OpenQASM
 
+2026-07-28
+
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
 And which circuits can we implement?
 
 It makes sense to have a first-class, phase-free Pauli-string type,
 rather than carrying an unused complex phase.
-We want to represent phase-free $n$-qubit Pauli strings.
-That is,
+We want to represent phase-free $n$-qubit Pauli strings:
 
-$$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
+$$\\{ P_1 \otimes \cdots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-In what follows, we define no operations on Pauli strings.
+In what follows, I do not define any operations on Pauli strings.
 We may need to introduce phases and operations on Pauli strings.
 But I want to see how much we can do without them.
 
@@ -27,7 +28,7 @@ r q[3], q[5], q[11];
 ```
 where `pauli` is a new type.
 
-It will probably be useful to support slicing:
+It will likely be useful to support slicing:
 ```C
 pauli[3] p = p"XYZ";
 qubit[2] q;
@@ -39,23 +40,23 @@ r q[0], q[1];
 
 ### Examples
 
-Here is Bell-state preparation as shown in Fig. 2a of Game of Surface Codes (GOSC).
+Here is Bell-state preparation as shown in Fig. 2a in Game of Surface Codes (GOSC).
 ```C
 qubit[2] q;
 pauli[2] zprod = p"ZZ";
 
-h q; // Apply h to both qubits.
+h q; // Apply H to both qubits.
 bit b = measure_pauli(zprod) q;
 if (b == 1) {
     x q[0]; // map |01> and |10> to |00> and |11>.
 }
 ```
 
-The following PBC circuit is shown in Fig. 4a of GOSC.
-I define a gate via `rcontrol(p"X", p"Z")`.
-This gate applies `Z` on the target
-if the control is in the `-1` eigenstate of `X`.
-It is assumed that `rcontrol` is implemented in a library.
+The following PBC circuit is shown in Fig. 4a in GOSC.
+The gate `rcontrol(p"X", p"Z")`
+applies `Z` on the target
+if the control qubit is in the `-1` eigenstate of `X`.
+A definition of `rcontrol` is given below.
 ```C
 qubit[4] q;
 gate z8 = rot(pi / 8, p"Z");
@@ -107,17 +108,17 @@ let prod = P ++ z;
 
 let register = data ++ ancilla;
 
-prepare data; // prepare is a gate that prepares the state of data.
-t ancilla[0]; // magically generate a magic state.
+prepare data; // The gate `prepare` initializes the state of `data`.
+t ancilla[0]; // Magically generate a magic state.
 
-// A product measurement on the data and ancilla qubits.
+// A product measurement to the data and ancilla qubits.
 bit b1 = measure_pauli(prod) register;
 
 if (b1 == 1) {
     rot(pi / 4, P) data;
 }
 
-h ancilla; // to measure in the X basis
+h ancilla; // To measure in the X basis
 bit b2 = measure ancilla;
 
 if (b2 == 1) {
@@ -127,7 +128,7 @@ if (b2 == 1) {
 
 #### Magic state distillation
 
-This circuit is shown in Fig. 15 of GOSC.
+This circuit is shown in Fig. 15 in GOSC.
 ```C
 qubit[4] dirty;
 qubit[1] cleaner;
@@ -135,7 +136,7 @@ qubit[1] cleaner;
 t dirty; // create magic states |m>
 h cleaner; // prepare |+>
 let register = dirty ++ cleaner;
-let a = pi / 8;
+angle a = pi / 8;
 
 rot(a, p"IIZZZ") register;
 rot(a, p"IZIZZ") register;
@@ -153,15 +154,15 @@ h dirty;
 measure dirty; // Measure dirty qubits in the X basis.
 ```
 
-Alternatively, we can use a multi-dimensional array of type `pauli`, and use a loop, like this:
+Alternatively, we can use a multidimensional array of type `pauli`, and use a loop, like this:
 ```C
-qubit[4] dirty;
+qubit[4] noisy;
 qubit[1] cleaner;
 
-t dirty; // create magic states |m>
+t noisy; // create magic states |m>
 h cleaner; // prepare |+>
-let register = dirty ++ cleaner;
-let a = pi / 8;
+let register = noisy ++ cleaner;
+angle a = pi / 8;
 
 array[pauli, 11, 5] prods = {
     p"IIZZZ",
@@ -181,6 +182,24 @@ for int i in [0:10] {
     rot(a, prods[i]) register;
 }
 
-h dirty;
-measure dirty; // measure out dirty qubits in the X basis.
+h noisy;
+measure noisy; // measure out noisy qubits in the X basis.
+```
+
+### Controlled gates
+
+Implementation of $P_1$ -controlled- $P_2$ gates,
+following Fig. 5c in GOSC.
+Eigenstates of `p1` control the application of `p2`.
+The gate exhibits a symmetry: it also implements
+eigenstates of `p2` controlling the application of `p1`.
+```C
+gate rcontrol(p1, p2) q1, q2
+{
+    let prod = p1 ++ p2;
+    let q = q1 ++ q2;
+    rot(pi / 4, prod) q;
+    rot(-pi / 4, p1) q1;
+    rot(-pi / 4, p2) q2;
+}
 ```
