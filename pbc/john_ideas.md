@@ -24,7 +24,7 @@ pauli[3] p = p"XYZ";
 angle a = pi / 8;
 gate r = rot(a, p);
 qubit[12] q;
-r q[3], q[5] q[11];,
+r q[3], q[5], q[11];
 ```
 where `pauli` is a new type.
 
@@ -34,7 +34,7 @@ pauli[3] p = p"XYZ";
 qubit[2] q;
 
 angle a = pi / 8;
-gate r = rot(a, p({0, 2}); // The Pauli in the exponent is XZ.
+gate r = rot(a, p({0, 2})); // The Pauli in the exponent is XZ.
 r q[0], q[1];
 ```
 
@@ -60,9 +60,10 @@ It is assumed that `rcontrol` is implemented in a library.
 ```C
 qubit[4] q;
 gate z8 = rot(pi / 8, p"Z");
+gate z4 = rot(pi / 4, p"Z");
 gate x4 = rot(pi / 4, p"X");
 gate xm4 = rot(-pi / 4, p"X");
-gate cxz = rcontrol(p"X", p"Z"); // operate with Z on target, if control is in -1 eigenstate of X.
+gate cxz = rcontrol(p"X", p"Z"); // Apply Z to target, if control is in -1 eigenstate of X.
 
 z8 q[0];
 cxz q[1], q[2];
@@ -108,7 +109,7 @@ let prod = P ++ z;
 let register = data ++ ancilla;
 
 prepare data; // prepare is a gate that prepares the state of data.
-t z[0]; // magically generate a magic state.
+t ancilla[0]; // magically generate a magic state.
 
 // A product measurement including data and ancilla qubits.
 bit b1 = measure_pauli(prod) register;
@@ -175,12 +176,12 @@ array[pauli, 11, 5] prods = {
     p"ZZIZI",
     p"ZZZII",
     p"ZZZZZ"
-}
+};
 
 for int i in [0:10] {
     rot(a, prods[i]) register;
 }
 
 h dirty;
-measure dirty; // measure out dirty qubits in x-basis
+measure dirty; // measure out dirty qubits in the X basis.
 ```
