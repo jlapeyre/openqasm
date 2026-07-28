@@ -125,7 +125,6 @@ h cleaner; // prepare |+>
 let register = dirty ++ cleaner;
 let a = pi / 8;
 
-// A loop would be nice here.
 rot(p"IIZZZ", a) register;
 rot(p"IZIZZ", a) register;
 rot(p"IZZIZ", a) register;
@@ -138,13 +137,11 @@ rot(p"ZZIZI", a) register;
 rot(p"ZZZII", a) register;
 rot(p"ZZZZZ", a) register;
 
-
 h dirty;
 measure dirty; // measure out dirty qubits in x-basis
 ```
 
-
-Or, we might allow this:
+Alternatively, we can use a multi-dimension array of `factor`, and use a loop, like this:
 ```C
 qubit[4] dirty;
 qubit[1] cleaner;
@@ -171,8 +168,6 @@ array[factor, 11, 5] prods = {
 for int i in [0:10] {
     rot(prods[i], a) register;
 }
-
-
 
 h dirty;
 measure dirty; // measure out dirty qubits in x-basis
