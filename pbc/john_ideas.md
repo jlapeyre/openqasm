@@ -8,21 +8,27 @@ It makes sense to have a first-class type representing (phaseless) Pauli strings
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-Let's try to implement a Pauli string as an array of single-qubit factors,
+In the following we define no operations on Pauli strings.
+We may have to introduce phases, and operations on Paulis.
+But I want to see you much you can do without them.
+
+Let's try to implement a Pauli string as an array of single-qubit Paulis,
 rather than a new array-like type.
+Then we can use existing syntax and semantics.
+
 It might work like this,
 ```C
-factor[3] p = p"XYZ";
+pauli[3] p = p"XYZ";
 angle a = pi / 8;
 gate r = rot(a, p);
 qubit[12] q;
 r q[3], q[5] q[11];,
 ```
-where `factor` is a new type.
+where `pauli` is a new type.
 
 It will probably be useful to support slicing:
 ```C
-factor[3] p = p"XYZ";
+pauli[3] p = p"XYZ";
 qubit[2] q;
 
 angle a = pi / 8;
@@ -35,7 +41,7 @@ r q[0], q[1];
 Here is Bell state preparation as shown in Fig. 2a of GOSC.
 ```C
 qubit[2] q;
-factor[2] zprod = p"ZZ";
+pauli[2] zprod = p"ZZ";
 
 h q; // Apply h to both qubits.
 bit b = measure_pauli(zprod) q;
@@ -91,11 +97,11 @@ For the moment, I am dodging existing OQ3 semantics.
 This circuit is shown in Fig. 7 in GOSC.
 The effect is to apply `rot(P, pi / 8)` to the `data` register.
 ```C
-factor[3] P = p"XZY";
+pauli[3] P = p"XZY";
 qubit[3] data;
 
 qubit[1] ancilla;
-factor[1] z = p"Z";
+pauli[1] z = p"Z";
 
 let prod = P ++ z;
 
@@ -146,7 +152,7 @@ h dirty;
 measure dirty; // measure out dirty qubits in x-basis
 ```
 
-Alternatively, we can use a multi-dimension array of `factor`, and use a loop, like this:
+Alternatively, we can use a multi-dimension array of `pauli`, and use a loop, like this:
 ```C
 qubit[4] dirty;
 qubit[1] cleaner;
@@ -156,7 +162,7 @@ h cleaner; // prepare |+>
 let register = dirty ++ cleaner;
 let a = pi / 8;
 
-array[factor, 11, 5] prods = {
+array[pauli, 11, 5] prods = {
     p"IIZZZ",
     p"IZIZZ",
     p"IZZIZ",
