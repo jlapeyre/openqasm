@@ -127,6 +127,7 @@ if (b2 == 1) {
 
 #### Magic state distillation
 
+This circuit is shown in Fig. 15 of GOSC.
 ```C
 qubit[4] dirty;
 qubit[1] cleaner;
