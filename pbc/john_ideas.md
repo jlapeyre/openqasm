@@ -11,7 +11,7 @@ That is,
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-In what follow, we define no operations on Pauli strings.
+In what follows, we define no operations on Pauli strings.
 We may need to introduce phases and operations on Pauli strings.
 But I want to see how much we can do without them.
 
