@@ -2,7 +2,7 @@
 
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more. What features do we need to add?
 
-It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless Pauli strings
+It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless $n$-qubit Pauli strings
 
 $$\\{ P_1 \ldots P_n | P_i \in \\{I, X, Y, Z\\} \\}$$
 
