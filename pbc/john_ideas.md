@@ -16,6 +16,14 @@ r q[3], q[5] q[11];,
 ```
 where `factor` is a new type.
 
+It will probably be useful to support slicing:
+```C
+factor[3] p = p"XYZ";
+angle a = pi / 8;
+gate r = rot(a, p({0, 2}); // The Pauli in the exponent is XZ.
+qubit[2] q;
+r q[0], q[1];
+```
 
 The following PBC circuit is shown in figure 4a of GOSC.
 I define a gate via `rcontrol(p"X", p"Z")`.
