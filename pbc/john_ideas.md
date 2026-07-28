@@ -78,7 +78,7 @@ bit[4] b;
 b = measure q;
 ```
 
-Magic state injection
+#### Magic state injection
 
 This example uses aliased, concatenated registers, or arrays.
 For the moment, I am dodging existing OQ3 semantics.
@@ -86,11 +86,11 @@ For the moment, I am dodging existing OQ3 semantics.
 This circuit is shown in Fig. 7 in GOSC.
 The effect is to apply `rot(P, pi / 8)` to the `data` register.
 ```C
-factor[3] P = "XZY";
+factor[3] P = p"XZY";
 qubit[3] data;
 
 qubit[1] ancilla;
-factor[1] z = "Z";
+factor[1] z = p"Z";
 
 let prod = P ++ z;
 
@@ -114,8 +114,66 @@ if (b2 == 1) {
 }
 ```
 
-Distillation
+#### Magic state distillation
 
 ```
 qubit[4] dirty;
 qubit[1] cleaner;
+
+t dirty; // create magic states |m>
+h cleaner; // prepare |+>
+let register = dirty ++ cleaner;
+let a = pi / 8;
+
+// A loop would be nice here.
+rot(p"IIZZZ", a) register;
+rot(p"IZIZZ", a) register;
+rot(p"IZZIZ", a) register;
+rot(p"IZZZI", a) register;
+rot(p"ZIIZZ", a) register;
+rot(p"ZIZIZ", a) register;
+rot(p"ZIZZI", a) register;
+rot(p"ZZIIZ", a) register;
+rot(p"ZZIZI", a) register;
+rot(p"ZZZII", a) register;
+rot(p"ZZZZZ", a) register;
+
+
+h dirty;
+measure dirty; // measure out dirty qubits in x-basis
+```
+
+
+Or, we might allow this:
+```
+qubit[4] dirty;
+qubit[1] cleaner;
+
+t dirty; // create magic states |m>
+h cleaner; // prepare |+>
+let register = dirty ++ cleaner;
+let a = pi / 8;
+
+array[factor, 11, 5] prods = {
+    p"IIZZZ",
+    p"IZIZZ",
+    p"IZZIZ",
+    p"IZZZI",
+    p"ZIIZZ",
+    p"ZIZIZ",
+    p"ZIZZI",
+    p"ZZIIZ",
+    p"ZZIZI",
+    p"ZZZII",
+    p"ZZZZZ"
+}
+
+for int i in [0:10] {
+    rot(prods[i], a) register;
+}
+
+
+
+h dirty;
+measure dirty; // measure out dirty qubits in x-basis
+```
