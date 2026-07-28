@@ -4,13 +4,15 @@ Suppose that we want to add support for Pauli rotations and product measurements
 What features do we need to add?
 And which circuits can we implement?
 
-It makes sense to have a first-class type representing (phaseless) Pauli strings, rather than carry an unused complex phase. We want to represent phaseless $n$-qubit Pauli strings
+It makes sense to have a first-class type representing (phaseless) Pauli strings,
+rather than carring an unused complex phase.
+We want to represent phaseless $n$-qubit Pauli strings
 
 $$\\{ P_1 \otimes \ldots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
-In the following we define no operations on Pauli strings.
+In the following, we define no operations on Pauli strings.
 We may have to introduce phases, and operations on Paulis.
-But I want to see you much you can do without them.
+But I want to see how much we can do without them.
 
 Let's try to implement a Pauli string as an array of single-qubit Paulis,
 rather than a new array-like type.
@@ -52,14 +54,14 @@ if (b == 1) {
 
 The following PBC circuit is shown in Fig. 4a of GOSC.
 I define a gate via `rcontrol(p"X", p"Z")`.
-This gate operates with `Z` on the target
+This gate applies `Z` on the target
 if the control is in the `-1` eigenstate of `X`.
 It is assumed that `rcontrol` is implemented in a library.
 ```C
 qubit[4] q;
-gate z8 = rot(p"Z", pi / 8);
-gate x4 = rot(p"X", pi / 4);
-gate xm4 = rot(p"X", -pi / 4);
+gate z8 = rot(pi / 8, p"Z");
+gate x4 = rot(pi / 4, p"X");
+gate xm4 = rot(-pi / 4, p"X");
 gate cxz = rcontrol(p"X", p"Z"); // operate with Z on target, if control is in -1 eigenstate of X.
 
 z8 q[0];
@@ -89,11 +91,11 @@ b = measure q;
 
 #### Magic state injection
 
-This example uses aliased, concatenated registers, or arrays.
-For the moment, I am dodging existing OQ3 semantics.
+This example uses aliased, concatenated registers and arrays.
+For the moment, I am dodging questions of existing OQ3 semantics.
 
 This circuit is shown in Fig. 7 in GOSC.
-The effect is to apply `rot(P, pi / 8)` to the `data` register.
+The effect is to apply `rot(pi / 8, P)` to the `data` register.
 ```C
 pauli[3] P = p"XZY";
 qubit[3] data;
@@ -112,14 +114,14 @@ t z[0]; // magically generate a magic state.
 bit b1 = measure_pauli(prod) register;
 
 if (b1 == 1) {
-    rot(P, pi / 4) data;
+    rot(pi / 4, P) data;
 }
 
 h ancilla; // to measure in the X basis
 bit b2 = measure ancilla;
 
 if (b2 == 1) {
-    rot(P, pi / 2) data;
+    rot(pi / 2, P) data;
 }
 ```
 
@@ -135,20 +137,20 @@ h cleaner; // prepare |+>
 let register = dirty ++ cleaner;
 let a = pi / 8;
 
-rot(p"IIZZZ", a) register;
-rot(p"IZIZZ", a) register;
-rot(p"IZZIZ", a) register;
-rot(p"IZZZI", a) register;
-rot(p"ZIIZZ", a) register;
-rot(p"ZIZIZ", a) register;
-rot(p"ZIZZI", a) register;
-rot(p"ZZIIZ", a) register;
-rot(p"ZZIZI", a) register;
-rot(p"ZZZII", a) register;
-rot(p"ZZZZZ", a) register;
+rot(a, p"IIZZZ") register;
+rot(a, p"IZIZZ") register;
+rot(a, p"IZZIZ") register;
+rot(a, p"IZZZI") register;
+rot(a, p"ZIIZZ") register;
+rot(a, p"ZIZIZ") register;
+rot(a, p"ZIZZI") register;
+rot(a, p"ZZIIZ") register;
+rot(a, p"ZZIZI") register;
+rot(a, p"ZZZII") register;
+rot(a, p"ZZZZZ") register;
 
 h dirty;
-measure dirty; // measure out dirty qubits in x-basis
+measure dirty; // measure out dirty qubits in the X basis
 ```
 
 Alternatively, we can use a multi-dimension array of `pauli`, and use a loop, like this:
@@ -176,7 +178,7 @@ array[pauli, 11, 5] prods = {
 }
 
 for int i in [0:10] {
-    rot(prods[i], a) register;
+    rot(a, prods[i]) register;
 }
 
 h dirty;
