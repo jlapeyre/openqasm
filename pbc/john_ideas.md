@@ -1,6 +1,7 @@
 ## Pauli rotations and product measurements in OpenQASM
 
-2026-07-28
+* 2026-07-29 discuss associating indices with factors in Pauli strings
+* 2026-07-28 initial document
 
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
@@ -54,7 +55,7 @@ if (b == 1) {
 
 The following PBC circuit is shown in Fig. 4a in GOSC.
 The gate `rcontrol(p"X", p"Z")`
-applies `Z` on the target
+applies `Z` to the target
 if the control qubit is in the `-1` eigenstate of `X`.
 A definition of `rcontrol` is given below.
 ```C
@@ -93,7 +94,7 @@ b = measure q;
 #### Magic state injection
 
 This example uses aliased, concatenated registers and arrays.
-For now, I am dodging questions of existing OQ3 semantics.
+For now, I am dodging questions about existing OQ3 semantics.
 
 This circuit is shown in Fig. 7 in GOSC.
 The effect is to apply `rot(pi / 8, P)` to the `data` register.
@@ -111,14 +112,14 @@ let register = data ++ ancilla;
 prepare data; // The gate `prepare` initializes the state of `data`.
 t ancilla[0]; // Magically generate a magic state.
 
-// A product measurement to the data and ancilla qubits.
+// A product measurement on the data and ancilla qubits.
 bit b1 = measure_pauli(prod) register;
 
 if (b1 == 1) {
     rot(pi / 4, P) data;
 }
 
-h ancilla; // To measure in the X basis
+h ancilla; // Rotate to measure in the X basis
 bit b2 = measure ancilla;
 
 if (b2 == 1) {
@@ -133,8 +134,8 @@ This circuit is shown in Fig. 15 in GOSC.
 qubit[4] dirty;
 qubit[1] cleaner;
 
-t dirty; // create magic states |m>
-h cleaner; // prepare |+>
+t dirty; // Create magic states |m>
+h cleaner; // Prepare |+>
 let register = dirty ++ cleaner;
 angle a = pi / 8;
 
@@ -160,7 +161,7 @@ qubit[4] noisy;
 qubit[1] cleaner;
 
 t noisy; // create magic states |m>
-h cleaner; // prepare |+>
+h cleaner; // Prepare |+>
 let register = noisy ++ cleaner;
 angle a = pi / 8;
 
@@ -183,7 +184,7 @@ for int i in [0:10] {
 }
 
 h noisy;
-measure noisy; // measure out noisy qubits in the X basis.
+measure noisy; // Measure out noisy qubits in the X basis.
 ```
 
 ### Controlled gates
@@ -191,8 +192,8 @@ measure noisy; // measure out noisy qubits in the X basis.
 Implementation of $P_1$ -controlled- $P_2$ gates,
 following Fig. 5c in GOSC.
 Eigenstates of `p1` control the application of `p2`.
-The gate exhibits a symmetry: it also implements
-eigenstates of `p2` controlling the application of `p1`.
+Equivalently,
+eigenstates of `p2` control the application of `p1`.
 ```C
 gate rcontrol(p1, p2) q1, q2
 {
@@ -203,3 +204,40 @@ gate rcontrol(p1, p2) q1, q2
     rot(-pi / 4, p2) q2;
 }
 ```
+
+### Associating indices in a Pauli string with qubits
+
+Blake asked the question
+
+* how do we associate indices in such a Pauli string to qubits?
+  * do we make that association at time of declaration or at time of use?
+
+I tried associating the indices with Pauli strings, but quickly ran into problems.
+
+Internally, it might make sense use a bit-packed, symplectic representation,
+up to thousands of factors.
+I thought we would need an external syntax that enabled users to specify strings with very
+large $n$ but small support.
+So I thought that we would need to support a sparse representation of Pauli strings.
+(But if you associate no indices, then you already have an implicit sparse representation:
+`p"XYZ"` can be applied to any three qubits.)
+
+To illustrate the difficulty, here is my initial attempt at designing Pauli strings involved carrying the qubit indices with the string:
+```C
+factor[4] p = p"X3 Y12 Z21"; // whitespace is ignored
+```
+
+As I began to write example code, it became clear that this is unwieldy, or even unworkable.
+The problem is that qubit positions are now represented in two ways and must be kept in sync.
+
+For instance,
+in the example above, implementing Fig. 4a in GOSC, I defined
+```C
+gate cxz = rcontrol(p"X", p"Z");
+```
+Then I applied this gate to several pairs of qubits, for instance
+```C
+cxz q[0], q[3];
+```
+If the indices were carried with the Pauli strings,
+we would need some sort of hack to change the indices.
