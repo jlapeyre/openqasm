@@ -1,7 +1,8 @@
 ## Pauli rotations and product measurements in OpenQASM
 
-* 2026-07-29 discuss associating indices with factors in Pauli strings
-* 2026-07-28 initial document
+* 2026-08-05 Discuss practical vs mathematical design
+* 2026-07-29 Discuss associating indices with factors in Pauli strings
+* 2026-07-28 Initial document
 
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
@@ -204,6 +205,31 @@ gate rcontrol(p1, p2) q1, q2
     rot(-pi / 4, p2) q2;
 }
 ```
+
+## Other design considerations
+
+### Mathematical _vs_ practical notation
+
+Should Pauli strings be arrays of symbols with little semantic content?
+Or should they be typed and operations constrained to follow mathematical properties.
+
+More generally, how closely should language elements correspond to mathematics?
+I think that it is worth searching for the right balance between mathematical clarity
+and practicality. Choosing a close correspondence between math and programming language
+should be evaluated for its utility.
+
+A couple of examples that come to mind.
+
+- Mathematica: Expressions are built of meaningless symbols that are transformed by rules.
+    - bad: Searching for structural or semantic errors is very difficult.
+    - good: The freedom gives users flexibility for creative solutions. For example, I translated
+    a useful Mathematica idiom to sympy. This failed because sympy imposes semantic constraints on
+    the argument to the cosine function. Violating this was needed for an intermediate step.
+
+- Julia: Strings under concatenation form a free monoid over an alphabet. Concatenation is non-commutative,
+ so should be represented by "*" rather than "+". This correctness seems to have unlocked no wider utility.
+ Julia just uses a different symbol than the rest of the computing world.
+
 
 ### Associating indices in a Pauli string with qubits
 
