@@ -206,6 +206,29 @@ gate rcontrol(p1, p2) q1, q2
 }
 ```
 
+### Layout, implementation, exposrure for Pauli strings
+
+There are many choices here.
+Sample use cases would help clarify tradeoffs.
+I don't have these at the moment.
+
+For many operations the symplectic representation and memory layout are practical and efficient.
+Some choices
+
+#### Hide the implementation and expose higher-level functions
+
+The implementation is free to use arrays of bits in the following.
+```C
+pauli[3] p = p"XZY";
+pauli[3] q = p"XYZ";
+
+bool r = iscommute(p, q);
+```
+
+#### Require symplectic layout and give the user some level of access
+
+...
+
 ## Other design considerations
 
 ### Mathematical _vs_ practical notation
