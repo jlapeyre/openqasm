@@ -1,6 +1,6 @@
 ## Pauli rotations and product measurements in OpenQASM
 
-* 2026-08-05 Discuss practical vs mathematical design
+* 2026-08-05 Discuss practical vs mathematical design. Discuss layout of Pauli strings
 * 2026-07-29 Discuss associating indices with factors in Pauli strings
 * 2026-07-28 Initial document
 
