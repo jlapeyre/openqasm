@@ -220,7 +220,7 @@ should be evaluated for its utility.
 
 A couple of examples that come to mind.
 
-- Mathematica: Expressions are built of meaningless symbols that are transformed by rules.
+- Mathematica: Expressions are an ordered list of meaningless symbols (or subexpressions) that are transformed by rules.
     - bad: Searching for structural or semantic errors is very difficult.
     - good: The freedom gives users flexibility for creative solutions. For example, I translated
     a useful Mathematica idiom to sympy. This failed because sympy imposes semantic constraints on
