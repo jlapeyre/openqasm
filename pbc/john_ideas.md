@@ -298,6 +298,40 @@ cxz q[0], q[3];
 If the indices were carried with the Pauli strings,
 we would need some sort of hack to change the indices.
 
+### Projective Pauli group
+
+TLDR; I don't see a use for exposing the projective Pauli group as such to users.
+However, I would not be surprised if there is in fact a compelling use case.
+
+The proposal above shows that supporting bare (i.e. phaseless) Pauli strings would be useful.
+These correspond to the elements of the projective Pauli group, i.e. the quotient of
+the Pauil group by the its (group theoretical) center $\\{I, -I, iI, -iI\\}$.
+For the projective Pauli group, we can still use symbols $X, Y, Z$,
+but the group operation no longer corresponds to multiplication of the Pauli matrices.
+For example in the projective Pauli group $X Y = Y X = Z$.
+
+Should this group operation be exposed? Eg.
+```
+pauli[1] px = p"X";
+pauli[1] py = p"Y";
+pauli[1] pz = p"Z";
+
+px * py == pz; // true
+py * px == pz; // true
+```
+
+Alternatively, the type `pauli` is essentially an array of symbols.
+The interpretation is pushed off to the handful of users of this string.
+For example in
+```
+rot(phi, p);
+iscommute(p1, p2);
+```
+`p`, `p1`, and `p2` are treated as elements of the full Pauli group with phase $1$.
+In fact, in the `iscommute` call, any phase can be assigned to each of `p1` and `p2`.
+In both cases, however, the arguments `p`, `p1`, and `p2` are not interpreted as
+elements of the projective Pauli group.
+
 ### References
 
 [^1]: Daniel Litinski (https://arxiv.org/abs/1808.02892)
