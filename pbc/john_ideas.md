@@ -4,7 +4,11 @@
 * 2026-07-29 Discuss associating indices with factors in Pauli strings
 * 2026-07-28 Initial document
 
-
+An attractive approach to designing PBC support is to start with a general idea of
+what you want to express, and some examples, and then implement language features in
+order to express these examples.
+I don't know if it's possible to follow this program in practice.
+But the material below is an experiment with this approach.
 
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
