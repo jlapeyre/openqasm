@@ -22,7 +22,7 @@ $$\\{ P_1 P_2 \cdots P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
 In what follows, I do not define any operations on Pauli strings.
 We may need to introduce phases and operations on Pauli strings.
-But I want to see how much we can do without them.
+But they are not needed here.
 
 If we represent Pauli strings as arrays of single‑qubit Pauli values,
 then we can reuse existing syntax and semantics.
