@@ -49,7 +49,7 @@ r q[0], q[1];
 
 ### Examples
 
-Here is Bell-state preparation as shown in Fig. 2a in Game of Surface Codes (GOSC).
+Here is Bell-state preparation as shown in Fig. 2a in Game of Surface Codes (GOSC)[^1].
 ```C
 qubit[2] q;
 pauli[2] zprod = p"ZZ";
@@ -297,3 +297,7 @@ cxz q[0], q[3];
 ```
 If the indices were carried with the Pauli strings,
 we would need some sort of hack to change the indices.
+
+### References
+
+[^1]: Daniel Litinski (https://arxiv.org/abs/1808.02892)
