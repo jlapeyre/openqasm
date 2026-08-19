@@ -311,7 +311,7 @@ but the group operation no longer corresponds to multiplication of the Pauli mat
 For example in the projective Pauli group $X Y = Y X = Z$.
 
 Should this group operation be exposed? Eg.
-```
+```C
 pauli[1] px = p"X";
 pauli[1] py = p"Y";
 pauli[1] pz = p"Z";
@@ -323,7 +323,7 @@ py * px == pz; // true
 Alternatively, the type `pauli` is essentially an array of symbols.
 The interpretation is pushed off to the handful of users of this string.
 For example in
-```
+```C
 rot(phi, p);
 iscommute(p1, p2);
 ```
