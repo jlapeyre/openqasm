@@ -213,7 +213,7 @@ gate rcontrol(p1, p2) q1, q2
 }
 ```
 
-### Layout, implementation, exposrure for Pauli strings
+### Layout, implementation, exposure for Pauli strings
 
 There are many choices here.
 Sample use cases would help clarify tradeoffs.
