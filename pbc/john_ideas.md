@@ -18,7 +18,7 @@ It makes sense to have a first-class, phase-free Pauli-string type,
 rather than carrying an unused complex phase.
 We want to represent phase-free $n$-qubit Pauli strings:
 
-$$\\{ P_1 \otimes \cdots \otimes P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
+$$\\{ P_1 P_2 \cdots P_n | P_i \in \\{I, X, Y, Z\\} \\}.$$
 
 In what follows, I do not define any operations on Pauli strings.
 We may need to introduce phases and operations on Pauli strings.
