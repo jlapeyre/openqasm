@@ -4,6 +4,8 @@
 * 2026-07-29 Discuss associating indices with factors in Pauli strings
 * 2026-07-28 Initial document
 
+
+
 Suppose that we want to add support for Pauli rotations and product measurements, but nothing more.
 What features do we need to add?
 And which circuits can we implement?
@@ -234,7 +236,7 @@ bool r = iscommute(p, q);
 ### Mathematical _vs_ practical notation
 
 Should Pauli strings be arrays of symbols with little semantic content?
-Or should they be typed and operations constrained to follow mathematical properties.
+Or should they be typed, and operations be constrained to follow mathematical properties.
 
 More generally, how closely should language elements correspond to mathematics?
 I think that it is worth searching for the right balance between mathematical clarity
