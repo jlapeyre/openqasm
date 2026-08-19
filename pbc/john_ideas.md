@@ -236,7 +236,7 @@ bool r = iscommute(p, q);
 ### Mathematical _vs_ practical notation
 
 Should Pauli strings be arrays of symbols with little semantic content?
-Or should they be typed, and operations be constrained to follow mathematical properties.
+Or should they be typed, and operations be constrained to follow mathematical properties?
 
 More generally, how closely should language elements correspond to mathematics?
 I think that it is worth searching for the right balance between mathematical clarity
@@ -252,7 +252,7 @@ A couple of examples that come to mind.
     the argument to the cosine function. Violating this was needed for an intermediate step.
 
 - Julia: Strings under concatenation form a free monoid over an alphabet. Concatenation is non-commutative,
- so should be represented by "*" rather than "+". This correctness seems to have unlocked no wider utility.
+ thus it should be represented by "*" rather than "+". This correctness seems to have unlocked no wider utility.
  Julia just uses a different symbol than the rest of the computing world.
 
 
