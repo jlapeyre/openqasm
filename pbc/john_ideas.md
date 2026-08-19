@@ -1,8 +1,9 @@
 ## Pauli rotations and product measurements in OpenQASM
 
-* 2026-08-05 Discuss practical vs mathematical design. Discuss layout of Pauli strings
-* 2026-07-29 Discuss associating indices with factors in Pauli strings
-* 2026-07-28 Initial document
+* 2026-08-19 Minor changes.
+* 2026-08-05 Discuss practical vs mathematical design. Discuss layout of Pauli strings.
+* 2026-07-29 Discuss associating indices with factors in Pauli strings.
+* 2026-07-28 Initial document.
 
 An attractive approach to designing PBC support is to start with a general idea of
 what you want to express, and some examples, and then implement language features in
