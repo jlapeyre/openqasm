@@ -1,5 +1,6 @@
 ## Pauli rotations and product measurements in OpenQASM
 
+* 2026-09-29 Add signatures, and comments.
 * 2026-08-19 Minor changes.
 * 2026-08-05 Discuss practical vs mathematical design. Discuss layout of Pauli strings.
 * 2026-07-29 Discuss associating indices with factors in Pauli strings.
@@ -31,11 +32,19 @@ It might work like this:
 ```C
 pauli[3] p = p"XYZ";
 angle a = pi / 8;
-gate r = rot(a, p);
 qubit[12] q;
-r q[3], q[5], q[11];
+rot(a, p) q[3], q[5], q[11];
 ```
 where `pauli` is a new type.
+
+For clarity, here are declarations of functions performing Pauli rotations and product measurements.
+```C
+// Performs a Pauli product measurement and returns the parity
+def measure_pauli(readonly array[pauli, 1] p, array[qubit, 1] q) -> bit;
+
+// Applies a Pauli rotation.
+def rot(angle a, readonly array[pauli, 1] p, array[qubit, 1] q);
+```
 
 It will likely be useful to support slicing:
 ```C
@@ -43,8 +52,8 @@ pauli[3] p = p"XYZ";
 qubit[2] q;
 
 angle a = pi / 8;
-gate r = rot(a, p({0, 2})); // The Pauli in the exponent is XZ.
-r q[0], q[1];
+// The Pauli in the exponent is XZ.
+rot(a, p({0, 2})) q[0], q[1];
 ```
 
 ### Examples
@@ -66,6 +75,11 @@ The gate `rcontrol(p"X", p"Z")`
 applies `Z` to the target
 if the control qubit is in the `-1` eigenstate of `X`.
 A definition of `rcontrol` is given below.
+I am assuming below that expressions like `rot(pi / 8, p"Z")`
+create and return a gate object which can be bound to a variable.
+This is not possible in current OpenQASM 3 semantics.
+But it is convenient here.
+
 ```C
 qubit[4] q;
 gate z8 = rot(pi / 8, p"Z");
@@ -194,6 +208,8 @@ for int i in [0:10] {
 h noisy;
 measure noisy; // Measure out noisy qubits in the X basis.
 ```
+The example above shows the advantage of keeping `pauli` as a standard
+data type: we can use existing syntax and semantics for arrays and loops.
 
 ### Controlled gates
 
@@ -230,6 +246,12 @@ pauli[3] p = p"XZY";
 pauli[3] q = p"XYZ";
 
 bool r = iscommute(p, q);
+```
+
+We have called `iscommute` with signature:
+```C
+// Checks if two Pauli strings commute
+def iscommute(readonly array[pauli, 1] p1, readonly array[pauli, 1] p2) -> bool;
 ```
 
 #### Require symplectic layout and give the user some level of access
